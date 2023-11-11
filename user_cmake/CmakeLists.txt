@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 3.18)
+project(zhidkov_s_a)
+
+find_package(doctest CONFIG REQUIRED)
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "cmake")
+
+set(CMAKE_VERBOSE_MAKEFILE True)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/bin.dbg)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/bin.rel)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/bin.relwithdbg)
+
+# Create a new folder
+
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/objective)
+
+# Identify the user_system
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message("Linux platform detected.")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    message("Windows platform detected.")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    message("macOS platform detected.")
+else()
+    message("Unknown platform detected.")
+endif()
+
+
+# download binary file from git_hub
+
+file(DOWNLOAD "https://github.com/SemenZhidkov/Test_BinTest/raw/main/rational_test.cpp.o"
+"${CMAKE_CURRENT_SOURCE_DIR}/objective/rational_test_cpp.o" )
+
+
+add_executable(rational_test objective/rational_test_cpp.o)
+
+target_link_libraries(rational_test rational doctest::doctest)
+
+add_test(NAME rational_test COMMAND rational_test)
+
+add_subdirectory(prj.lab)
