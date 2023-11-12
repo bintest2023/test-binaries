@@ -1,47 +1,45 @@
 cmake_minimum_required(VERSION 3.18)
-project(zhidkov_s_a)
-
+project(prj_name)
+ 
 find_package(doctest CONFIG REQUIRED)
-
+ 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "cmake")
-
+ 
 set(CMAKE_VERBOSE_MAKEFILE True)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
-
+ 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/bin.dbg)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/bin.rel)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/bin.relwithdbg)
-
-# Create a new folder
-
+ 
+set(bintest_repo https://github.com/bintest2023)
+ 
+set(REQUIRED_BINARY aa) # user input # binary which needs to be downloaded
+set(USER_LIB aa) # user input # directory with user source code
+set(USER_SUBDIR aa) # user input # directory which should be linked with external libraries
+ 
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/objective)
-
-# Identify the user_system
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    message("Linux platform detected.")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    message("Windows platform detected.")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    message("macOS platform detected.")
+ 
+set(file_url "${bintest_repo}/test-binaries/raw/main/${CMAKE_HOST_SYSTEM_NAME}/${REQUIRED_BINARY}")
+set(destination "${CMAKE_CURRENT_SOURCE_DIR}/objective/${REQUIRED_BINARY}") # change rational
+ 
+message(${file_url})
+message(${destination})
+ 
+# checking if required binary file exists otherwise we download it from git
+if(EXISTS ${destination})
+    message("-- ${binary_file} has been already downloaded")
 else()
-    message("Unknown platform detected.")
+    file(DOWNLOAD ${file_url} ${destination} STATUS status)
 endif()
-
-
-# download binary file from git_hub
-
-file(DOWNLOAD "https://github.com/SemenZhidkov/Test_BinTest/raw/main/rational_test.cpp.o"
-"${CMAKE_CURRENT_SOURCE_DIR}/objective/rational_test_cpp.o" )
-
-
-add_executable(rational_test objective/rational_test_cpp.o)
-
-target_link_libraries(rational_test rational doctest::doctest)
-
-add_test(NAME rational_test COMMAND rational_test)
-
-add_subdirectory(prj.lab)
+ 
+add_executable(test objective/${REQUIRED_BINARY})
+ 
+target_link_libraries(test ${USER_SUBDIR} doctest::doctest)
+ 
+add_test(NAME test COMMAND test)
+ 
+add_subdirectory(USER_LIB)
