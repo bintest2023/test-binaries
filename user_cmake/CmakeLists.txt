@@ -15,15 +15,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/bin.dbg)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/bin.rel)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/bin.relwithdbg)
  
-set(bintest_repo https://github.com/bintest2023)
+set(bintest https://github.com/bintest2023)
  
-set(REQUIRED_BINARY aa) # user input # binary which needs to be downloaded
-set(USER_LIB aa) # user input # directory with user source code
-set(USER_SUBDIR aa) # user input # directory which should be linked with external libraries
+set(REQUIRED_BINARY ___) # user input # binary which needs to be downloaded
+set(USER_LIB ___) # user input # directory with user source code
+set(USER_SUBDIR ___) # user input # directory which should be linked with external libraries
  
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/objective)
  
-set(file_url "${bintest_repo}/test-binaries/raw/main/${CMAKE_HOST_SYSTEM_NAME}/${REQUIRED_BINARY}")
+set(file_url "${bintest}/test-binaries/raw/main/${CMAKE_HOST_SYSTEM_NAME}/${REQUIRED_BINARY}")
 set(destination "${CMAKE_CURRENT_SOURCE_DIR}/objective/${REQUIRED_BINARY}") # change rational
  
 message(${file_url})
@@ -40,6 +40,6 @@ add_executable(test objective/${REQUIRED_BINARY})
  
 target_link_libraries(test ${USER_SUBDIR} doctest::doctest)
  
-add_test(NAME test COMMAND test)
+add_test(NAME test_lib COMMAND test_lib)
  
 add_subdirectory(USER_LIB)
