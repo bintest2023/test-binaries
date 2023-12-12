@@ -1,0 +1,34 @@
+set(CMAKE_VERBOSE_MAKEFILE True)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+ 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/bin.dbg)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_SOURCE_DIR}/bin.rel)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${CMAKE_CURRENT_SOURCE_DIR}/bin.relwithdbg)
+ 
+set(bintest https://github.com/bintest2023)
+ 
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/objective)
+ 
+set(file_url "${bintest}/test-binaries/raw/main/${CMAKE_HOST_SYSTEM_NAME}/${REQUIRED_BINARY}")
+set(destination "${CMAKE_CURRENT_SOURCE_DIR}/objective/${REQUIRED_BINARY}") # change rational
+ 
+message(${file_url})
+message(${destination})
+ 
+# checking if required binary file exists otherwise we download it from git
+if(EXISTS ${destination})
+    message("-- ${binary_file} has been already downloaded")
+else()
+    file(DOWNLOAD ${file_url} ${destination} STATUS status)
+endif()
+ 
+add_executable(test objective/${REQUIRED_BINARY})
+
+add_subdirectory(${USER_LIB})
+ 
+target_link_libraries(test ${USER_SUBDIR})
+ 
+add_test(NAME test_lib COMMAND test_lib)
+ 
